@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatForge - Craft Your Sound</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navigation */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(94, 234, 212, 0.2);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        nav ul li {
+            margin: 0 20px;
+        }
+        
+        nav ul li a {
+            color: #f8fafc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            color: #5eead4;
+            background: rgba(94, 234, 212, 0.1);
+        }
+        
+        /* Page Sections */
+        .page {
+            display: none;
+            padding: 100px 0 60px;
+            min-height: 100vh;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #f8fafc;
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(94, 234, 212, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 1;
+            color: #cbd5e1;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #0ea5e9, #0d9488);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        /* Reviews Section */
+        .reviews {
+            padding: 80px 0;
+            background: transparent;
+        }
+        
+        .reviews h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            font-size: 2.5rem;
+            color: #f8fafc;
+            position: relative;
+        }
+        
+        .reviews h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #0d9488);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .review-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(2, 8, 20, 0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+        
+        .review-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(2, 8, 20, 0.5);
+            border-color: rgba(94, 234, 212, 0.3);
+        }
+        
+        .review-card .stars {
+            color: #fbbf24;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .review-card p {
+            color: #e2e8f0;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        
+        .review-card .author {
+            font-weight: bold;
+            color: #5eead4;
+            font-size: 1.1rem;
+        }
+        
+        /* Social Media */
+        .social-media {
+            text-align: center;
+            padding: 60px 0;
+            background: transparent;
+        }
+        
+        .social-media h2 {
+            color: #f8fafc;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: rgba(30, 41, 59, 0.7);
+            color: #5eead4;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            border: 1px solid rgba(94, 234, 212, 0.2);
+            backdrop-filter: blur(5px);
+        }
+        
+        .social-icons a:hover {
+            background: linear-gradient(135deg, #0ea5e9, #0d9488);
+            color: white;
+            transform: translateY(-5px);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        /* App Sections */
+        .app-section {
+            padding: 80px 0;
+            background: transparent;
+        }
+        
+        .app-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #f8fafc;
+            position: relative;
+        }
+        
+        .app-section h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #0ea5e9, #0d9488);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        .app-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(2, 8, 20, 0.5);
+            border-color: rgba(94, 234, 212, 0.3);
+        }
+        
+        .feature-card h3 {
+            color: #5eead4;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .feature-card p {
+            color: #cbd5e1;
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(2, 8, 20, 0.4);
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5eead4;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(94, 234, 212, 0.2);
+            border-radius: 8px;
+            font-size: 16px;
+            color: #f8fafc;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0ea5e9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* Success Stories */
+        .success-story {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(2, 8, 20, 0.4);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(94, 234, 212, 0.1);
+        }
+        
+        .success-story:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(2, 8, 20, 0.5);
+            border-color: rgba(94, 234, 212, 0.3);
+        }
+        
+        .success-story h3 {
+            color: #5eead4;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .success-story p {
+            color: #e2e8f0;
+            line-height: 1.7;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 8px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .hero {
+                padding: 100px 0;
+            }
+            
+            .review-grid,
+            .app-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('about')">About</a></li>
+            <li><a href="#" onclick="showPage('dj-app')">DJ Studio App</a></li>
+            <li><a href="#" onclick="showPage('producer-app')">Music Producer App</a></li>
+            <li><a href="#" onclick="showPage('success-stories')">Success Stories</a></li>
+            <li><a href="#" onclick="showPage('contact')">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <div class="container">
+                <h1>Welcome to BeatForge</h1>
+                <p>Where Music Meets Innovation. Create, Mix, and Master Your Sound.</p>
+                <a href="#" class="btn" onclick="showPage('dj-app')">Start Creating</a>
+            </div>
+        </section>
+
+        <section class="reviews">
+            <div class="container">
+                <h2>What Our Users Say</h2>
+                <div class="review-grid">
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"BeatForge transformed my music production. The intuitive interface and powerful features helped me create my first album!"</p>
+                        <div class="author">- DJ Alex Storm</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"The DJ Studio App is incredible! Seamless mixing and amazing effects. My parties have never been better!"</p>
+                        <div class="author">- Maya Rodriguez</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars">★★★★★</div>
+                        <p>"As a music producer, BeatForge's tools are unmatched. The quality of sound and ease of use is phenomenal."</p>
+                        <div class="author">- Marcus Chen</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="social-media">
+            <div class="container">
+                <h2>Connect With Us</h2>
+                <div class="social-icons">
+                    <a href="#" title="Facebook">📘</a>
+                    <a href="#" title="Twitter">🐦</a>
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="YouTube">📺</a>
+                    <a href="#" title="SoundCloud">🎵</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 30px;">About BeatForge</h1>
+            <div style="max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <h2>Our Story</h2>
+                <p>Founded in 2020, BeatForge emerged from a simple vision: to democratize music creation and make professional-quality music production accessible to everyone. What started as a small team of passionate musicians and tech enthusiasts has grown into a global community of creators.</p>
+                
+                <h2>Our Mission</h2>
+                <p>We believe that everyone has music inside them. Our mission is to provide the tools, technology, and platform for creators to express themselves through music, regardless of their background or experience level.</p>
+                
+                <h2>Our Values</h2>
+                <ul style="margin-left: 20px;">
+                    <li>Innovation - Constantly pushing the boundaries of music technology</li>
+                    <li>Accessibility - Making music creation available to everyone</li>
+                    <li>Community - Fostering a supportive environment for creators</li>
+                    <li>Quality - Delivering professional-grade tools and services</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- DJ Studio App Page -->
+    <div id="dj-app" class="page">
+        <div class="container">
+            <div class="app-section">
+                <h2>DJ Studio App</h2>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px;">Professional DJ software that fits in your pocket</p>
+                
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <img src="data:image/svg+xml,%3Csvg width='400' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='300' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='24'%3EDJ Studio App Interface%3C/text%3E%3C/svg%3E" alt="DJ Studio App" style="border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                </div>
+                
+                <div class="app-features">
+                    <div class="feature-card">
+                        <h3>🎧 Real-time Mixing</h3>
+                        <p>Seamlessly mix tracks with professional-grade tools and effects</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎚️ Auto-Sync</h3>
+                        <p>Automatic BPM detection and synchronization for perfect mixes</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎵 Loop & Sample</h3>
+                        <p>Create loops and trigger samples on the fly</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📱 Mobile Optimized</h3>
+                        <p>Full functionality on your smartphone or tablet</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="#" class="btn">Download Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Producer App Page -->
+    <div id="producer-app" class="page">
+        <div class="container">
+            <div class="app-section">
+                <h2>Music Producer App</h2>
+                <p style="text-align: center; font-size: 1.2rem; margin-bottom: 40px;">Complete music production studio in your hands</p>
+                
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <img src="data:image/svg+xml,%3Csvg width='400' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='300' fill='%23444'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='white' font-size='24'%3EMusic Producer App%3C/text%3E%3C/svg%3E" alt="Music Producer App" style="border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+                </div>
+                
+                <div class="app-features">
+                    <div class="feature-card">
+                        <h3>🎹 Multi-Track Recording</h3>
+                        <p>Record unlimited tracks with professional audio quality</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎸 Virtual Instruments</h3>
+                        <p>Access 100+ high-quality virtual instruments and synths</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎚️ Advanced Mixing</h3>
+                        <p>Professional mixer with EQ, compression, and effects</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>☁️ Cloud Collaboration</h3>
+                        <p>Collaborate with artists worldwide in real-time</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="#" class="btn">Start Producing</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Stories Page -->
+    <div id="success-stories" class="page">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 40px;">Success Stories</h1>
+            
+            <div class="success-story">
+                <h3>From Bedroom to Mainstage: The Rise of Luna Beats</h3>
+                <p>Luna started using BeatForge's DJ Studio App in her bedroom. Within 18 months, she was headlining major festivals worldwide. "BeatForge gave me the confidence and tools to pursue my dreams," she says.</p>
+            </div>
+            
+            <div class="success-story">
+                <h3>Chart-Topping Hit Created Entirely on Mobile</h3>
+                <p>Producer Marcus Johnson created the viral hit "Summer Waves" entirely using our Music Producer App on his phone during his daily commute. The track reached #1 on electronic charts in 5 countries.</p>
+            </div>
+            
+            <div class="success-story">
+                <h3>Collaboration Across Continents</h3>
+                <p>When Tokyo-based Yuki met London-based Sarah through BeatForge's collaboration features, they created "Neon Nights" - a track that now has over 50 million streams and counting.</p>
+            </div>
+            
+            <div class="success-story">
+                <h3>From Hobby to Full-Time Career</h3>
+                <p>College student Alex Chen turned his passion for music into a thriving business. Using BeatForge tools, he now produces tracks for video games and commercials, earning six figures annually.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <h1 style="text-align: center; margin-bottom: 40px;">Contact Us</h1>
+            
+            <div class="contact-form">
+                <form onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn" style="width: 100%; border: none; cursor: pointer;">Send Message</button>
+                </form>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <h3>Other Ways to Reach Us</h3>
+                <p>Email: support@beatforge.com</p>
+                <p>Phone: 1-800-BEAT-FORGE</p>
+                <p>Address: 123 Music Lane, Sound City, SC 12345</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function handleSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We\'ll get back to you soon.');
+            event.target.reset();
+        }
+        
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
